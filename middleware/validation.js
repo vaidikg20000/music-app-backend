@@ -1,5 +1,5 @@
 module.exports = function (req, res, next){
-    const {username, email, password} = req.body;
+    let {username, email, password} = req.body;
 
     username = username.trim();
     password = password.trim();

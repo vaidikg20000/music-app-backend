@@ -43,3 +43,5 @@ ALTER TABLE "Song_Artists" ADD FOREIGN KEY ("artist_id") REFERENCES "Artists" ("
 ALTER TABLE "Songs_by_User" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("user_id");
 
 ALTER TABLE "Songs_by_User" ADD FOREIGN KEY ("song_id") REFERENCES "Songs" ("song_id");
+
+ALTER TABLE "users" ALTER COLUMN ("created_at") SET DEFAULT now();
