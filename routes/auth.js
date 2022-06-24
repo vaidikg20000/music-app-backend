@@ -14,12 +14,12 @@ router.get('/is-authenticated', auth, async(req, res) => {
     }
 })
 
-router.post('/signup', async(req, res, next) =>{
+router.post('/signup', validation, async(req, res, next) =>{
     try {
         
         // input validation
         const {username, email, password} = req.body; 
-        validation(req, res, next);
+        // validation(req, res, next);
         
         // database cross check
         const user = await pool.query("SELECT * FROM users WHERE LOWER(email)=LOWER($1)", [email]);
@@ -37,13 +37,20 @@ router.post('/signup', async(req, res, next) =>{
         }
         
         // return token in FE
-        const token = jwtGenerator(password);
+        const token = jwtGenerator(username);
         return res.json({token});
 
     } catch (error) {
         console.error(error.message);
         return res.status(500).json('Internal Server Error');
     }
+})
+
+router.post('/login',validation, async(req,res,next) => {
+    // input validation
+    const {username, email, password} = req.body; 
+    // validation(req, res, next);
+    
 })
 
 module.exports = router;
