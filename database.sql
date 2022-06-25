@@ -10,38 +10,38 @@ CREATE TABLE "users" (
   "password" varchar NOT NULL
 );
 
-CREATE TABLE "Songs" (
+CREATE TABLE "songs" (
   "song_id" SERIAL PRIMARY KEY,
   "name" varchar NOT NULL,
   "image" varchar ,
-  "date_of_release" timestamp NOT NULL
+  "date_of_release" date NOT NULL
 );
 
-CREATE TABLE "Artists" (
+CREATE TABLE "artists" (
   "artist_id" SERIAL PRIMARY KEY,
   "artist_name" varchar NOT NULL,
-  "dob" timestamp NOT NULL,
+  "dob" date NOT NULL,
   "bio" varchar NOT NULL
 );
 
-CREATE TABLE "Song_Artists" (
+CREATE TABLE "song_artists" (
   "id" SERIAL PRIMARY KEY,
   "song_id" int NOT NULL,
   "artist_id" int NOT NULL
 );
 
-CREATE TABLE "Songs_by_User" (
+CREATE TABLE "songs_by_user" (
   "user_id" int,
   "song_id" int,
   "ratings" int
 );
 
-ALTER TABLE "Song_Artists" ADD FOREIGN KEY ("song_id") REFERENCES "Songs" ("song_id");
+ALTER TABLE "song_artists" ADD FOREIGN KEY ("song_id") REFERENCES "songs" ("song_id");
 
-ALTER TABLE "Song_Artists" ADD FOREIGN KEY ("artist_id") REFERENCES "Artists" ("artist_id");
+ALTER TABLE "song_artists" ADD FOREIGN KEY ("artist_id") REFERENCES "artists" ("artist_id");
 
-ALTER TABLE "Songs_by_User" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("user_id");
+ALTER TABLE "songs_by_user" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("user_id");
 
-ALTER TABLE "Songs_by_User" ADD FOREIGN KEY ("song_id") REFERENCES "Songs" ("song_id");
+ALTER TABLE "songs_by_user" ADD FOREIGN KEY ("song_id") REFERENCES "songs" ("song_id");
 
-ALTER TABLE "users" ALTER COLUMN ("created_at") SET DEFAULT now();
+ALTER TABLE "users" ALTER  "created_at" SET DEFAULT now();

@@ -7,6 +7,7 @@ const jwtGenerator = require('./utils/jwtGenerator');
 app.use(express.json());    
 app.use(cors());
 app.use('/auth', require('./routes/auth'));
+app.use('/songs', require('./routes/songs'));
 
 
 app.get("/",(req,res)=>{
