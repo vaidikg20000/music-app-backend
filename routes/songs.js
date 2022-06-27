@@ -36,6 +36,78 @@ router.get("/artists/all", async (req, res) => {
   return res.status(200).json(getArtists.rows);
 });
 
+router.get("/all/top", async (req, res) => {
+  const token = req.headers.token; 
+  const songsInfo = [];
+  const getSongs = await pool.query("SELECT * FROM songs LIMIT 10");
+  const user_email = parseJwt(token).key;
+
+  let user_id = await pool.query(
+    "SELECT user_id FROM users WHERE LOWER(email)=LOWER($1)",
+    [user_email]
+  );
+
+  user_id = user_id.rows[0].user_id;
+
+  for (let i = 0; i < getSongs.rows.length; i++) {
+    let song_id = getSongs.rows[i].song_id;
+    let data = getSongs.rows[i];
+
+    const artist_id = await pool.query(
+      "SELECT artist_id FROM song_artists WHERE song_id=$1",
+      [song_id]
+    );
+    let artistList = [];
+    // console.log("artist id",artist_id);
+    for (let j = 0; j < artist_id.rows.length; j++) {
+      let artistMatchId = artist_id.rows[j].artist_id;
+      const artistName = await pool.query(
+        "SELECT artist_name FROM artists WHERE artist_id=$1",
+        [artistMatchId]
+      );
+      //   console.log('artist name',artistName);
+      artistList.push(artistName.rows[0].artist_name);
+    }
+    const getRatings = await pool.query(
+      "SELECT ratings FROM songs_by_user WHERE song_id=$1 AND user_id=$2",
+      [song_id, user_id]
+    );
+    data.ratings = getRatings.rows[0].ratings;
+    data.artists = artistList;
+    songsInfo.push(data);
+  }
+  res.status(200).json(songsInfo);
+});
+
+router.get("/artists/all/top", async (req, res) => {
+  const artistsInfo = [];
+  const getArtists = await pool.query("SELECT * FROM artists LIMIT 10");
+
+  for (let i = 0; i < getArtists.rows.length; i++) {
+    let artist_id = getArtists.rows[i].artist_id;
+    let data = getArtists.rows[i];
+
+    const song_id = await pool.query(
+      "SELECT song_id FROM song_artists WHERE artist_id=$1",
+      [artist_id]
+    );
+    let songList = [];
+
+    for (let j = 0; j < song_id.rows.length; j++) {
+      let songMatchId = song_id.rows[j].song_id;
+      const songName = await pool.query(
+        "SELECT name FROM songs WHERE song_id=$1",
+        [songMatchId]
+      );
+      songList.push(songName.rows[0].name);
+    }
+    data.songs = songList;
+    artistsInfo.push(data);
+  }
+  artistsInfo.sort((a, b) => b.songs.length - a.songs.length);
+  res.status(200).json(artistsInfo);
+});
+
 router.post("/add", songValidation, async (req, res) => {
   try {
     const { songName, songDate, image, artistsName } = req.body;
@@ -84,9 +156,10 @@ router.post("/add", songValidation, async (req, res) => {
       );
     });
 
+    let random = Math.floor(Math.random() * 5) + 1;
     const songsByUser = await pool.query(
       "INSERT INTO songs_by_user (user_id, song_id, ratings) VALUES ($1, $2, $3) RETURNING *",
-      [user_id, song.rows[0].song_id, 0]
+      [user_id, song.rows[0].song_id, random]
     );
 
     return res.status(200).json("Successfully created");
