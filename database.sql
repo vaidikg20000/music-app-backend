@@ -7,13 +7,14 @@ CREATE TABLE "users" (
   "full_name" varchar NOT NULL,
   "created_at" timestamp ,
   "email" varchar NOT NULL,
-  "password" varchar NOT NULL
+  "password" varchar NOT NULL,
+  UNIQUE ("email")
 );
 
 CREATE TABLE "songs" (
   "song_id" SERIAL PRIMARY KEY,
   "name" varchar NOT NULL,
-  "image" varchar ,
+  "image" text ,
   "date_of_release" date NOT NULL
 );
 
@@ -27,13 +28,15 @@ CREATE TABLE "artists" (
 CREATE TABLE "song_artists" (
   "id" SERIAL PRIMARY KEY,
   "song_id" int NOT NULL,
-  "artist_id" int NOT NULL
+  "artist_id" int NOT NULL,
+  UNIQUE ("song_id", "artist_id")
 );
 
 CREATE TABLE "songs_by_user" (
-  "user_id" int,
-  "song_id" int,
-  "ratings" int
+  "user_id" int NOT NULL,
+  "song_id" int NOT NULL,
+  "ratings" int NOT NULL,
+  UNIQUE ("user_id", "song_id")
 );
 
 ALTER TABLE "song_artists" ADD FOREIGN KEY ("song_id") REFERENCES "songs" ("song_id");
@@ -45,3 +48,5 @@ ALTER TABLE "songs_by_user" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("use
 ALTER TABLE "songs_by_user" ADD FOREIGN KEY ("song_id") REFERENCES "songs" ("song_id");
 
 ALTER TABLE "users" ALTER  "created_at" SET DEFAULT now();
+
+-- ALTER TABLE "users" ADD CONSTRAINT 
