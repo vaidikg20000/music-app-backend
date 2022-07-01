@@ -7,7 +7,10 @@ const pool = new Pool({
     password: process.env.postgresPassword,
     host: process.env.postgresHost,
     port: 5432,
-    database: process.env.postgresName
+    database: process.env.postgresName,
+    ssl: {
+      rejectUnauthorized: false
+    }
   });
   
 module.exports = pool;
