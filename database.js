@@ -3,11 +3,11 @@ require('dotenv').config();
 
 
 const pool = new Pool({
-    user: "postgres",
+    user: process.env.postgresUser,
     password: process.env.postgresPassword,
-    host: "localhost",
+    host: process.env.postgresHost,
     port: 5432,
-    database: "musicapp"
+    database: process.env.postgresName
   });
   
 module.exports = pool;
