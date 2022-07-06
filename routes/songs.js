@@ -50,7 +50,7 @@ router.get("/all/top", async (req, res) => {
   user_id = user_id.rows[0].user_id;
 
   const getSongs = await pool.query("SELECT * FROM songs_by_user WHERE user_id = $1 LIMIT 10",[user_id]);
-  console.log(getSongs.rows);
+  // console.log(getSongs.rows);
 
   for (let i = 0; i < getSongs.rows.length; i++) {
     let song_id = getSongs.rows[i].song_id;
