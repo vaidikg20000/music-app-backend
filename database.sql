@@ -39,13 +39,13 @@ CREATE TABLE "songs_by_user" (
   UNIQUE ("user_id", "song_id")
 );
 
-ALTER TABLE "song_artists" ADD FOREIGN KEY ("song_id") REFERENCES "songs" ("song_id");
+ALTER TABLE "song_artists" ADD FOREIGN KEY ("song_id") REFERENCES "songs" ("song_id") ON DELETE CASCADE;
 
-ALTER TABLE "song_artists" ADD FOREIGN KEY ("artist_id") REFERENCES "artists" ("artist_id");
+ALTER TABLE "song_artists" ADD FOREIGN KEY ("artist_id") REFERENCES "artists" ("artist_id") ON DELETE CASCADE;
 
-ALTER TABLE "songs_by_user" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("user_id");
+ALTER TABLE "songs_by_user" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("user_id") ON DELETE CASCADE;
 
-ALTER TABLE "songs_by_user" ADD FOREIGN KEY ("song_id") REFERENCES "songs" ("song_id");
+ALTER TABLE "songs_by_user" ADD FOREIGN KEY ("song_id") REFERENCES "songs" ("song_id") ON DELETE CASCADE;
 
 ALTER TABLE "users" ALTER  "created_at" SET DEFAULT now();
 

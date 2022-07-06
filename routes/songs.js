@@ -178,4 +178,14 @@ router.post("/add", songValidation, async (req, res) => {
   }
 });
 
+router.delete("/delete/:id",async (req, res) => {
+  const { id } = req.params;
+  const response = await pool.query("DELETE FROM songs WHERE song_id = $1",[id]);
+  console.log(response);
+  if(!response.rowCount){
+    return res.status(500).json("Could not Delete the data")
+  }
+  return res.status(200).json("Song Deleted Successfully");
+})
+
 module.exports = router;
