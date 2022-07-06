@@ -1,5 +1,8 @@
 # music-app-backend
 Made using Nodejs, ExpressJs, PostgreSql for Database and JWT for Authorization and Authentication.
+
+Hosted App- https://music-app-vaidikg20000.vercel.app/
+
 Frontend Repository Link- https://github.com/vaidikg20000/music-app
 
 ## Database Design
