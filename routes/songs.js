@@ -55,7 +55,7 @@ router.get("/all/top", async (req, res) => {
   for (let i = 0; i < getSongs.rows.length; i++) {
     let song_id = getSongs.rows[i].song_id;
     let data = getSongs.rows[i];
-    let image = await pool.query("SELECT image FROM songs WHERE song_id = $1",[song_id]);
+    let image = await pool.query("SELECT image,name FROM songs WHERE song_id = $1",[song_id]);
 
     const artist_id = await pool.query(
       "SELECT artist_id FROM song_artists WHERE song_id=$1",
@@ -82,6 +82,7 @@ router.get("/all/top", async (req, res) => {
       : Math.floor(Math.random() * 5) + 1;
     data.artists = artistList;
     data.image = image.rows[0].image;
+    data.name = image.rows[0].name;
     songsInfo.push(data);
   }
   res.status(200).json(songsInfo);
