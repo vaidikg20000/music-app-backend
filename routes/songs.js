@@ -37,7 +37,7 @@ router.get("/artists/all", async (req, res) => {
 });
 
 router.get("/all/top", async (req, res) => {
-  const token = req.headers.token; 
+  const token = req.headers.token;
   const songsInfo = [];
   const getSongs = await pool.query("SELECT * FROM songs LIMIT 10");
   const user_email = parseJwt(token).key;
@@ -72,7 +72,10 @@ router.get("/all/top", async (req, res) => {
       "SELECT ratings FROM songs_by_user WHERE song_id=$1 AND user_id=$2",
       [song_id, user_id]
     );
-    data.ratings = getRatings.rows[0].ratings;
+
+    data.ratings = getRatings.rows.length
+      ? getRatings.rows[0].ratings
+      : Math.floor(Math.random() * 5) + 1;
     data.artists = artistList;
     songsInfo.push(data);
   }
