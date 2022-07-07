@@ -41,11 +41,7 @@ router.get("/all/top", auth, async (req, res) => {
     const token = req.headers.token;
     const songsInfo = [];
     // const getSongs = await pool.query("SELECT * FROM songs LIMIT 10");
-    if (parseJwt(token)) {
-      const user_email = parseJwt(token).key;
-    } else {
-      return res.status(503).send("Token not found");
-    }
+    const user_email = parseJwt(token).key;
     let user_id = await pool.query(
       "SELECT user_id FROM users WHERE LOWER(email)=LOWER($1)",
       [user_email]
